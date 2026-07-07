@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Relevance Score · How relevant is your skill set in the AI era?</title>
+<meta name="description" content="A 7-minute, honest read on the 24 human capabilities that compound as AI gets more capable, so you know exactly where to focus next." />
+<meta property="og:title" content="The Relevance Score" />
+<meta property="og:description" content="How relevant is your skill set in the AI era? Score yourself across 24 capabilities that compound with AI." />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+:root{
+  --bg:#000000;--panel:#0C0D0C;--raised:#101210;--line:#2A2722;
+  --gold:#F3CB7D;--gold-deep:#C99A3E;--amber:#E89257;--amber-deep:#C9703C;
+  --ink:#ECEDEA;--muted:#B7B0A4;--faint:#8A847A;--descriptor:#D4CEC6;
+  --on-accent:#1D1304;--grad:linear-gradient(135deg,#F3CB7D 0%,#E89257 100%);--radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Poppins',system-ui,sans-serif;font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(60% 45% at 50% 0%,rgba(243,203,125,.10),transparent 70%),radial-gradient(50% 40% at 85% 100%,rgba(232,146,87,.07),transparent 70%)}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:28px 24px 90px;min-height:100vh;display:flex;flex-direction:column;text-align:left}
+h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color:var(--ink)}
+.eyebrow{font-family:'Poppins';font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:var(--gold);margin-bottom:18px}
+.gold{color:var(--gold)}.amber{color:var(--amber)}
+
+.brand{display:flex;align-items:center;gap:8px;margin-bottom:36px}
+.brand .name{font-family:'Poppins';font-weight:600;letter-spacing:.26em;text-transform:uppercase;font-size:12px;color:var(--muted)}
+.brand.hidden{display:none}
+
+.screen{display:none;animation:fade .5s ease both}
+.screen.active{display:flex;flex-direction:column;flex:1}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.btn{font-family:'Poppins';font-weight:600;font-size:16px;border:none;cursor:pointer;border-radius:999px;padding:15px 30px;background:var(--grad);color:var(--on-accent);transition:transform .15s,box-shadow .15s;box-shadow:0 10px 30px rgba(232,146,87,.28);align-self:flex-start}
+.btn:hover{transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid var(--line);box-shadow:none;font-weight:500}
+.btn-ghost:hover{border-color:var(--gold-deep);background:rgba(243,203,125,.05)}
+
+/* vertically centered intro-type screens, still left aligned */
+.vcenter{justify-content:center;flex:1}
+
+.landing h1{font-size:clamp(30px,5.4vw,44px);margin:6px 0 20px;letter-spacing:-.01em}
+.landing .sub{font-size:clamp(16px,2.3vw,19px);color:var(--ink);max-width:600px;margin:0 0 24px}
+.trust{margin-top:28px;color:var(--descriptor);font-size:15px;line-height:1.6;max-width:600px}
+
+.prime h2{font-size:clamp(22px,4vw,30px);margin-bottom:16px}
+.prime p{color:var(--muted);font-size:16px;max-width:580px;margin-bottom:30px}
+
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+.qtag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:600}
+.qcount{font-size:12.5px;color:var(--faint)}
+.pbar{height:5px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:32px}
+.pbar>i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.qprompt{font-family:'Lora',serif;font-weight:500;font-size:clamp(21px,3.4vw,27px);line-height:1.34;margin-bottom:26px}
+.options{display:flex;flex-direction:column;gap:12px}
+.opt{text-align:left;font-family:'Poppins';font-weight:300;font-size:clamp(15px,1.35vw,16.5px);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px 16px 52px;position:relative;cursor:pointer;transition:border-color .15s,background .15s;line-height:1.55}
+.opt:before{content:"";position:absolute;left:18px;top:18px;width:20px;height:20px;border-radius:50%;border:2px solid var(--faint);transition:all .15s}
+.opt:hover{border-color:var(--gold-deep);background:var(--raised)}
+.opt.sel{border-color:var(--gold);background:rgba(243,203,125,.07)}
+.opt.sel:before{border-color:var(--gold);background:var(--grad);box-shadow:0 0 0 3px rgba(243,203,125,.18)}
+.qhint{font-size:13px;color:var(--faint);margin-top:16px;min-height:16px}
+.qnav{margin-top:22px;display:flex;justify-content:space-between;align-items:center}
+.linkbtn{background:none;border:none;color:var(--muted);font-family:'Poppins';font-size:15px;cursor:pointer;padding:8px 4px}
+.linkbtn:hover{color:var(--gold)}
+.linkbtn[disabled]{opacity:.25;pointer-events:none}
+.linknext{color:var(--gold);font-weight:500}
+
+.gate h2{font-size:clamp(24px,4.2vw,32px);margin-bottom:14px}
+.gate p{color:var(--muted);font-size:16px;max-width:580px;margin-bottom:24px}
+.embed-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:22px;max-width:520px}
+.embed-note{font-size:13px;color:var(--faint);margin-top:10px}
+
+.calc{justify-content:center;flex:1}
+.spinner{width:50px;height:50px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--gold);animation:spin 1s linear infinite;margin-bottom:22px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.calc .msg{font-family:'Lora',serif;font-size:20px;color:var(--ink);min-height:28px}
+
+.res-hero .label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.scorewrap{display:flex;align-items:baseline;gap:6px;margin:2px 0 2px}
+.scorenum{font-family:'Lora',serif;font-weight:700;font-size:clamp(60px,13vw,96px);line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.scoreden{font-family:'Lora',serif;font-size:clamp(22px,4vw,28px);color:var(--faint)}
+.levelbadge{display:inline-block;margin-top:12px;padding:8px 20px;border-radius:999px;background:rgba(243,203,125,.1);border:1px solid var(--gold-deep);color:var(--gold);font-weight:600;font-size:14px;letter-spacing:.05em}
+.res-confirm{color:var(--faint);font-size:13px;margin-top:14px}
+.res-msg{font-family:'Lora',serif;font-weight:500;font-size:clamp(17px,2.4vw,20px);line-height:1.55;color:var(--ink);max-width:620px;margin:20px 0 0}
+
+.divider{height:1px;background:linear-gradient(90deg,var(--line),transparent);margin:34px 0}
+.section-title{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:16px}
+
+.radar-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 14px 18px}
+.radar-svg{width:100%;max-width:440px;height:auto;display:block;margin:0 auto}
+.radar-cap{color:var(--muted);font-size:14px;max-width:560px;margin:10px 0 0;text-align:left}
+
+.clusters{display:flex;flex-direction:column;gap:14px}
+.cl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 18px}
+.cl.top{border-color:var(--gold-deep)}.cl.focus{border-color:var(--amber-deep)}
+.cl-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.cl-name{font-family:'Lora',serif;font-size:17px;font-weight:600;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cl-score{font-weight:600;color:var(--gold);font-size:15px;white-space:nowrap}
+.cl-bar{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+.cl-bar>i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.cl-flag{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.flag-top{background:rgba(243,203,125,.12);color:var(--gold);border:1px solid var(--gold-deep)}
+.flag-focus{background:rgba(232,146,87,.12);color:var(--amber);border:1px solid var(--amber-deep)}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-size:12.5px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend .d{width:10px;height:10px;border-radius:50%}
+.d1{background:#94A0B0}.d2{background:#5F9FDB}.d3{background:#5FB98A}.d4{background:#B58BE0}
+
+.skillgroup{margin-bottom:20px}
+.sg-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:10px}
+.sg-name{font-family:'Lora',serif;font-size:16px;font-weight:600;color:var(--ink)}
+.sg-score{font-size:13px;color:var(--gold);font-weight:600}
+.skillrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;font-size:14px}
+.skillrow .nm{display:flex;align-items:center;gap:9px}
+.skillrow .dt{width:9px;height:9px;border-radius:50%;flex:none}
+.skillrow .lv{font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px}
+.lvl1{background:rgba(148,160,176,.18);color:#B4BDCB}.lvl2{background:rgba(95,159,219,.18);color:#82B8E8}
+.lvl3{background:rgba(95,185,138,.2);color:#82CCA1}.lvl4{background:rgba(181,139,224,.2);color:#C7A6EC}
+
+.insight{border-radius:var(--radius);padding:22px 22px;margin-top:16px}
+.insight.strength{background:linear-gradient(135deg,rgba(243,203,125,.09),rgba(232,146,87,.05));border:1px solid var(--gold-deep)}
+.insight.unlock{background:var(--panel);border:1px solid var(--amber-deep)}
+.insight .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.strength .kicker{color:var(--gold)}.unlock .kicker{color:var(--amber)}
+.insight h3{font-size:20px;margin-bottom:10px}
+.insight p{color:var(--ink);font-size:15.5px;line-height:1.6}
+.insight .cluster-name{font-family:'Lora',serif;font-style:italic}
+
+.actions{margin-top:8px}
+.share-row{display:flex;gap:12px;flex-wrap:wrap}
+.footnote{color:var(--faint);font-size:13.5px;margin-top:26px;line-height:1.6;max-width:600px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--gold);color:var(--on-accent);font-weight:600;font-size:14px;padding:12px 22px;border-radius:999px;opacity:0;transition:.3s;z-index:50;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:560px){
+  .wrap{padding:22px 16px 80px}
+  .opt{padding:15px 16px 15px 48px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand hidden" id="brand"><span class="name">The Relevance</span></div>
+
+  <!-- SCREEN 0 · LANDING -->
+  <section class="screen active vcenter landing" id="s-landing">
+    <div class="eyebrow">The Relevance Score</div>
+    <h1>How relevant is your skill set <span class="gold">in the AI era?</span></h1>
+    <p class="sub">See where you stand on the <strong>24 human capabilities</strong> that compound as AI gets more capable, so you know exactly where to focus next.</p>
+    <button class="btn" onclick="App.startIntro()">Find my Relevance Score →</button>
+    <div class="trust">Built on research and analysis from 50+ tech, business, and AI voices, synthesized into the 24 skills that actually compound with AI.</div>
+  </section>
+
+  <!-- SCREEN 1 · PRIMING -->
+  <section class="screen vcenter prime" id="s-prime">
+    <h2>Answer for how you <span class="gold">actually work</span>, not how you'd like to.</h2>
+    <p>There are no right answers. Pick the option closest to true today. Your first instinct is usually the honest one.</p>
+    <button class="btn" onclick="App.startQuestions()">Got it, let's go →</button>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="screen" id="s-question">
+    <div class="qhead"><span class="qtag" id="q-tag">Sharp Thinking</span><span class="qcount" id="q-count">Question 1 of 24</span></div>
+    <div class="pbar"><i id="q-bar"></i></div>
+    <div class="qprompt" id="q-prompt"></div>
+    <div class="options" id="q-options"></div>
+    <div class="qhint" id="q-hint"></div>
+    <div class="qnav">
+      <button class="linkbtn" id="q-back" onclick="App.back()">← Back</button>
+      <button class="linkbtn linknext" id="q-next" onclick="App.next()">Next →</button>
+    </div>
+  </section>
+
+  <!-- CALCULATING -->
+  <section class="screen calc" id="s-calc">
+    <div class="spinner"></div>
+    <div class="msg" id="calc-msg">Scoring your 24 answers…</div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen results" id="s-results">
+    <div class="res-hero">
+      <div class="label">Your Relevance Score</div>
+      <div class="scorewrap"><span class="scorenum" id="r-score">0</span><span class="scoreden">/100</span></div>
+      <div><span class="levelbadge" id="r-level">·</span></div>
+      <p class="res-msg" id="r-msg"></p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="insight strength">
+      <div class="kicker">Your strength</div>
+      <h3 id="r-strength-title"></h3>
+      <p id="r-strength-body"></p>
+    </div>
+    <div class="insight unlock">
+      <div class="kicker">Your focus area</div>
+      <h3 id="r-focus-title"></h3>
+      <p id="r-focus-body"></p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">Your four clusters at a glance</div>
+    <div class="radar-card">
+      <svg class="radar-svg" id="radar" viewBox="0 0 400 400" aria-label="Radar chart of your four clusters"></svg>
+      <p class="radar-cap">The wider the shape, the more evenly strong you are. The corner that pulls in is your focus area.</p>
+    </div>
+    <div class="clusters" id="r-clusters" style="margin-top:16px"></div>
+
+    <div class="divider"></div>
+    <div class="section-title">Every skill, by cluster</div>
+    <div class="legend">
+      <span><i class="d d4"></i>Compounding</span>
+      <span><i class="d d3"></i>Practicing</span>
+      <span><i class="d d2"></i>Building</span>
+      <span><i class="d d1"></i>Emerging</span>
+    </div>
+    <div id="r-allskills"></div>
+
+    <div class="divider"></div>
+    <div class="actions">
+      <div class="share-row">
+        <button class="btn btn-ghost" onclick="App.downloadPDF()">Download my results (PDF)</button>
+        <button class="btn btn-ghost" onclick="App.share()">Share my score</button>
+      </div>
+      <p class="footnote">Come back in 90 days and retake it. Relevance is a muscle, and this is how you watch it grow.</p>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CONFIG = { SITE_URL:"", NEWSLETTER:"The Relevance by Shilpi Sneha" };
+
+const CLUSTERS = { sharp:"Sharp Thinking", ai:"Operating With AI", reach:"Reach & Influence", human:"The Human Edge" };
+
+const QUESTIONS = [
+  {c:"sharp",skill:"Discernment",prompt:"When something convincing comes your way, whether a plan, an argument, or a piece of work, what's your instinct?",
+   opts:["If it sounds convincing, I usually take it as good and move on.","I trust my gut, but couldn't always say why.","I can tell quickly what's genuinely strong versus just well-polished.","People bring me things specifically to get my read on whether they're actually good."]},
+  {c:"sharp",skill:"Critical Thinking",prompt:"When you're evaluating an argument or a plan, what do you actually do?",
+   opts:["If the logic sounds reasonable, I usually take it at face value.","I'll question it when something feels off, though I don't always dig into why.","I test the reasoning, looking for the weak links and the assumptions underneath.","I routinely pressure-test ideas before they move forward, and people rely on me to catch what others miss."]},
+  {c:"sharp",skill:"Judgment",prompt:"When you have to make the call, with no clear right answer and real trade-offs, what happens?",
+   opts:["I'd rather get more input or let it settle before I commit.","I make the call, but I tend to second-guess it afterward.","I weigh the trade-offs and commit, even without full certainty.","People come to me specifically to make the hard call."]},
+  {c:"sharp",skill:"Decision Making",prompt:"Think about how you actually move from options to a decision. What's your pattern?",
+   opts:["I like to gather plenty of input, so decisions can take a while to land.","I decide, but slowly, and I often revisit the same decision.","I decide at the right speed for the stakes, and I don't relitigate once it's made.","I have a clear way of deciding when to go fast, slow down, or loop others in, and people trust my process."]},
+  {c:"sharp",skill:"Systems Thinking",prompt:"When you make a decision, how far do you trace its effects?",
+   opts:["I focus on the immediate task in front of me.","I consider the obvious knock-on effect when it comes up.","I map how a change ripples across people, timelines, and other work.","I design decisions around the whole system, second and third-order effects included."]},
+  {c:"sharp",skill:"Creative Thinking",prompt:"When you're stuck on a problem or staring at a blank page, what usually gets you moving?",
+   opts:["I usually go with the first solid idea, or the tried and true approach.","I try a couple of angles, but usually land close to what's expected.","I actively hunt for unlikely combinations and unusual angles until something clicks.","I regularly land on ideas that surprise people, ones no one else in the room saw."]},
+  {c:"sharp",skill:"Taste",prompt:"When you're weighing options that all technically work, say a design, a message, or a direction, what guides your pick?",
+   opts:["They all look fine to me, so I go with whatever's easiest.","I have a preference, but couldn't always explain what makes one better.","I have a clear, consistent sense of what's actually good, and I can say why.","People seek out my eye specifically, and what I pick tends to hold up over time."]},
+  {c:"sharp",skill:"Original Thinking",prompt:"When you create something, whether a document, a plan, or a piece of work, where does the point of view come from?",
+   opts:["I mostly start from what already exists, a template, an AI draft, or a model I've seen, and follow its lead.","I start from something existing, but I put my own spin on it so it doesn't feel generic.","I form my own angle first, then use tools to sharpen it.","People can spot my work in a crowd because the take is distinctly mine."]},
+
+  {c:"ai",skill:"AI Fluency",prompt:"Thinking about the last month, how does AI show up in your day-to-day work?",
+   opts:["Barely yet. I've tried it, but it's not part of how I work.","I reach for it on quick one-offs when I remember to.","It's part of my daily workflow across several kinds of tasks.","I've reshaped how I work around it, woven into subtasks throughout my day rather than a separate step I switch to."]},
+  {c:"ai",skill:"Problem Framing",prompt:"Before you hand anything to AI, how much shaping does the problem get first?",
+   opts:["I hand over whatever's in my head and see what comes back.","I add a bit of context, but mostly wing the framing.","I break the problem into clear pieces and define what good looks like before I start.","My framing is tight enough that much of the work is settled before AI touches it, and colleagues bring me their problems to help scope."]},
+  {c:"ai",skill:"Agent Orchestration",prompt:"When you hand a bigger task to AI, how do you set it up to run reliably?",
+   opts:["I haven't handed off anything bigger than a quick, one-shot ask yet.","I give it a prompt and take what comes back.","I set it up with the steps, tools, and context it needs to work through the task.","I direct AI like a small team, multi-step, multi-tool, with checks and guardrails, the way I'd direct people."]},
+  {c:"ai",skill:"AI Oversight",prompt:"While AI is doing the work, or right after, how involved do you stay?",
+   opts:["I set it running and pick it up when it's done; watching the process isn't a habit yet.","I glance at the output, but I don't really watch how it got there.","I check in at key points and redirect it when it drifts off track.","I supervise it like a report, with checkpoints along the way, catching drift early and stepping in before small errors compound."]},
+  {c:"ai",skill:"Verification",prompt:"When AI hands you a finished answer, how do you know it's actually right?",
+   opts:["If it looks fine, I usually take it as-is; close checking isn't a habit yet.","I skim for anything that jumps out as obviously off.","I check the parts the decision actually rests on and fix what's weak.","I verify it like a critical report, tracing key claims back to source, and I catch confident-but-wrong answers that slip past others."]},
+
+  {c:"reach",skill:"Storytelling & Communication",prompt:"When you need to make something land, whether an idea, an update, or a pitch, how does it usually go?",
+   opts:["I lay out the facts clearly and let them speak for themselves.","I explain it clearly, though it doesn't always stick.","I build a story around the point, in my own voice, and it usually connects.","People remember and repeat how I framed it, and the message travels without me in the room."]},
+  {c:"reach",skill:"Point of View & Sensemaking",prompt:"When your field is flooded with takes and information, what do you do with it?",
+   opts:["I mostly try to keep up.","I follow the conversation and form my own private opinions.","I make sense of it and stake out where I land, with reasons someone could argue with.","People look to me to cut through the noise, and my read helps others make sense of it."]},
+  {c:"reach",skill:"Distribution & Audience",prompt:"When you want something you've made to reach people, how does that go?",
+   opts:["I put it out and hope the right people see it.","I share it where I can, without a real plan.","I know where my audience's attention is and reach them there.","I've built trust and an audience ahead of time, so what I share lands from day one."]},
+  {c:"reach",skill:"Building & Shipping",prompt:"When you have an idea worth pursuing, what usually happens to it?",
+   opts:["It mostly stays an idea, since I rarely get the chance to build it.","I can make it real if someone else helps ship it.","I take it from idea to a finished, shipped thing myself.","I ship often, because turning ideas into real things is just how I work."]},
+
+  {c:"human",skill:"Self-Awareness & Motivation",prompt:"How well do you actually know your strengths, your gaps, and what drives you, and how do you know it's accurate?",
+   opts:["I'm still figuring it out; I don't have a clear read yet.","I have a rough sense, but it's mostly my own view and I don't act on it much.","I know my strengths and gaps, I've tested them against candid feedback, and I steer my work toward what energizes me.","Colleagues consistently route the right work to me because my strengths are visible and reliable; I seek feedback on my blind spots and design my growth around where I add the most value."]},
+  {c:"human",skill:"Focus",prompt:"Between the pings, the meetings, and the open tabs, how does undistracted focus actually happen in your week?",
+   opts:["Honestly, it mostly doesn't yet; my day goes to whatever's most urgent.","I know which work deserves deep focus and try to protect time, but it usually loses to what's urgent.","I regularly protect real blocks of undistracted focus, and most weeks the important deep work gets its time.","My calendar and role are built around focus: protected deep-work blocks are fixed and defended, and people plan around them so I can do the high-value work only I can do."]},
+  {c:"human",skill:"Adaptability & Resilience",prompt:"When your world of work shifts under you, whether a reorg, a change in priorities, or a new manager or role, how do you hold up and recover?",
+   opts:["Big changes throw me for a while before I find my footing.","I adjust eventually, once the dust settles.","I steady myself and find my footing fairly fast, then keep moving.","I treat change as normal and stay grounded through it, and others lean on me to steady them when things shift."]},
+  {c:"human",skill:"Learning Velocity",prompt:"When you need a new skill or tool, how fast do you pick it up, and how often are you doing this?",
+   opts:["I pick it up when I really have to, and lean on workarounds until then.","I get there eventually, but it's slow, and I usually need a deadline or a push.","When I decide I need something, I teach it to myself and am productive within a few weeks, including tools I've never touched.","I'm learning new tools constantly and apply them to unfamiliar problems fast; it's a habit, not an event, and people treat me as the go-to fast learner."]},
+  {c:"human",skill:"Agency & Ownership",prompt:"When you take on a piece of work, how much of the outcome do you treat as yours?",
+   opts:["I focus on the tasks I'm handed; the wider outcome is someone else's call.","I flag the risks and gaps I spot, then wait for direction on what to do about them.","I take responsibility for getting my work to a real result, not just completing the steps.","I own the outcome end to end: I anticipate what's needed, move without waiting to be told, and carry it through even when it gets messy."]},
+  {c:"human",skill:"Leadership Under Ambiguity",prompt:"When a group around you is unsure what to do, how do you show up?",
+   opts:["I'm glad to let someone else take the lead and get behind their direction.","I contribute my part and go with wherever the group lands.","I step in to help the group find a direction and keep it moving.","People consistently turn to me to set direction and steady them when things are unclear."]},
+  {c:"human",skill:"Relationship & Community Building",prompt:"How do you tend to build the relationships and community around your work?",
+   opts:["I keep things mostly professional, and reach out when I need something.","I stay close to a handful of people I already know well.","I put steady energy into my relationships, and it goes both ways, people know they can count on me.","I bring people together, creating the connections and community others want to be part of."]}
+];
+
+const ORDER = ["sharp","ai","reach","human"];
+const LEVELS = ["Emerging","Building","Practicing","Compounding"];
+
+const LEVEL_MSG = {
+  Emerging:"You can see where you stand, and that clarity is what makes progress possible. Every skill here is learnable. Don't spread yourself across all 24. Take your focus area below and give it a real attempt this week. That first rep is what gets you moving.",
+  Building:"You're already using several of these, just not consistently. Your next gain comes from steadiness: turning an occasional effort into a habit you can count on. Take your focus area below and put it on a set schedule this week, even fifteen minutes a day. Steady reps are what move your score.",
+  Practicing:"You use these deliberately, and it shows in your work. Your next level is depth: pushing your strongest area further while closing the one gap that holds the rest back. Bring your focus area below up to the standard of your best cluster. That's the point where your skills start reinforcing each other.",
+  Compounding:"These are second nature for you now, and they're multiplying what you can do. Your move from here is leverage: turn instinct into systems that run without you. Bring your focus area below up to speed, then package your strongest skill into something repeatable others can use. That's how it scales."
+};
+
+const STRENGTH = {
+  sharp:{t:"You see clearly.",b:"You can tell what's genuinely good and bring an angle that's your own. Judgment like that is the base your other three areas build on."},
+  ai:{t:"You have real command of AI.",b:"You shape the work, direct it, and catch where it's wrong, so AI makes you faster instead of just busier."},
+  reach:{t:"Your ideas travel.",b:"You can make work land and get it to the right people, so your thinking turns into real impact."},
+  human:{t:"Your human edge is strong.",b:"Focus, adaptability, ownership, and real relationships stay valuable no matter how capable AI gets. This is your moat."}
+};
+
+// Focus area = cluster framing (why) + skill action (what to do), assembled at display time.
+const FOCUS = {
+  sharp:{label:"sharper thinking",why:"When information and options come at you fast, clear judgment keeps your work sound, and strengthening it raises the quality of every call you make."},
+  ai:{label:"operating with AI",why:"Directed well, AI multiplies what you can get done, and strengthening this is what moves you from using it to leading it."},
+  reach:{label:"reach",why:"Ideas only create value once they reach the right people, and building this turns your work into real influence."},
+  human:{label:"the human edge",why:"Focus, ownership, resilience, and real relationships hold your work together, and strengthening them keeps you valuable as everything else speeds up."}
+};
+
+const ACTIONS = {
+  "Discernment":"next time something impressive comes your way, pause before you buy in and ask what would have to be true for it to be wrong.",
+  "Critical Thinking":"on your next big decision, write down the main assumption it rests on, then go looking for evidence that it's wrong.",
+  "Judgment":"take a hard call you're weighing, lay out the real trade-offs on each side, and get clear on which downsides you can live with.",
+  "Decision Making":"for your next decision, decide up front whether it's reversible; if it is, choose quickly and stop revisiting it.",
+  "Systems Thinking":"before your next change, trace it a few steps out: who it touches, what it shifts downstream, and what it sets in motion later.",
+  "Creative Thinking":"on your next stuck problem, push out three unexpected options before you let yourself take the obvious one.",
+  "Taste":"take one piece of work you think is genuinely great and pin down exactly what makes it great; the more precisely you can name it, the more you can repeat it.",
+  "Original Thinking":"next time you make something, put your own angle down first, before you open a template or an AI draft.",
+  "AI Fluency":"pick one routine task you'd normally do yourself and try it with AI tomorrow; notice where it helps and where it doesn't.",
+  "Problem Framing":"before your next AI request, get clear on what you actually want (the goal, who it's for, what a good result looks like) and hand AI that, not just the task.",
+  "Agent Orchestration":"take one multi-step task and set AI up to run it in stages, giving it the context and tools each step needs.",
+  "AI Oversight":"on your next AI task, follow along as it works instead of only checking the end, and step in the moment it drifts off track.",
+  "Verification":"next time AI gives you an answer, pressure-test the whole of it, the reasoning and judgment calls as much as the facts and figures, and lean hardest on the parts where it's interpreting, not just reporting.",
+  "Storytelling & Communication":"on your next update, lead with what it means for the people hearing it, then give them the detail.",
+  "Point of View & Sensemaking":"write one short take on something moving in your field, and say clearly where you land and why.",
+  "Distribution & Audience":"pick one thing you've made and put it where your audience actually spends time, not just wherever's easiest to post.",
+  "Building & Shipping":"take one idea that's been sitting and ship the smallest real version of it this week, done over perfect.",
+  "Self-Awareness & Motivation":"look back at the work that energized you most this month and the work that drained you; the pattern points to where you're at your best.",
+  "Focus":"block one ninety-minute stretch this week for your most important work, with your phone in another room.",
+  "Adaptability & Resilience":"next time something shifts unexpectedly, name the one thing you can control right now and start there.",
+  "Learning Velocity":"pick one skill or tool you've been meaning to learn and give it thirty focused minutes this week to get past the intimidation.",
+  "Agency & Ownership":"pick one outcome you genuinely care about and take ownership of carrying it to done, including the parts that aren't strictly your job.",
+  "Leadership Under Ambiguity":"in your next group discussion where no one's sure what to do, put a clear direction on the table and offer to take the first step.",
+  "Relationship & Community Building":"invest in one relationship or community around your work this week with no ask attached: a genuine check-in, an introduction you can make, or showing up for someone."
+};
+
+const App = (function(){
+  let idx = 0;
+  const answers = new Array(QUESTIONS.length).fill(null);
+  let result = null;
+  const $ = id => document.getElementById(id);
+  const show = id => {
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    $(id).classList.add('active');
+    $('brand').classList.toggle('hidden', id==='s-landing');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+
+  function startIntro(){ show('s-prime'); }
+  function startQuestions(){ idx=0; render(); show('s-question'); }
+
+  function render(){
+    const q = QUESTIONS[idx];
+    $('q-tag').textContent = CLUSTERS[q.c];
+    $('q-count').textContent = `Question ${idx+1} of ${QUESTIONS.length}`;
+    $('q-bar').style.width = (idx/QUESTIONS.length*100)+'%';
+    $('q-prompt').textContent = q.prompt;
+    $('q-hint').textContent = idx===0 ? "Closest to true, first instinct is usually right." : "";
+    $('q-back').disabled = idx===0;
+    $('q-next').disabled = answers[idx]===null;
+    $('q-next').textContent = idx===QUESTIONS.length-1 ? "See results →" : "Next →";
+    const box=$('q-options'); box.innerHTML='';
+    q.opts.forEach((text,i)=>{
+      const b=document.createElement('button');
+      b.className='opt'+(answers[idx]===i+1?' sel':'');
+      b.textContent=text; b.onclick=()=>choose(i+1);
+      box.appendChild(b);
+    });
+  }
+
+  function choose(val){
+    answers[idx]=val; render();
+    setTimeout(()=>{ advance(); },230);
+  }
+  function advance(){
+    if(idx < QUESTIONS.length-1){ idx++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+    else { $('q-bar').style.width='100%'; reveal(); }
+  }
+  function next(){ if(answers[idx]!==null) advance(); }
+  function back(){ if(idx>0){ idx--; render(); window.scrollTo({top:0,behavior:'smooth'}); } }
+
+  function reveal(){
+    compute(); show('s-calc');
+    const msgs=["Scoring your 24 answers…","Mapping your quadrant…","Finding your focus area…"];
+    let m=0; $('calc-msg').textContent=msgs[0];
+    const t=setInterval(()=>{ m++; if(m<msgs.length) $('calc-msg').textContent=msgs[m]; },600);
+    setTimeout(()=>{ clearInterval(t); paint(); show('s-results'); },1900);
+  }
+
+  function compute(){
+    const total = answers.reduce((a,b)=>a+(b||1),0);
+    const score = Math.round(total/(QUESTIONS.length*4)*100);
+    let level = total<=41?"Emerging":total<=59?"Building":total<=77?"Practicing":"Compounding";
+    const sums={},counts={}; ORDER.forEach(c=>{sums[c]=0;counts[c]=0;});
+    QUESTIONS.forEach((q,i)=>{ sums[q.c]+=(answers[i]||1); counts[q.c]++; });
+    const clusters = ORDER.map(c=>{ const avg=sums[c]/counts[c]; return {key:c,name:CLUSTERS[c],avg,pct:Math.round(avg/4*100)}; });
+    const top=[...clusters].sort((a,b)=>b.pct-a.pct)[0].key;
+    const focus=[...clusters].sort((a,b)=>a.pct-b.pct)[0].key;
+    // lowest-scoring skill within the focus cluster (tie -> first in question order)
+    let focusSkill=null, low=99;
+    QUESTIONS.forEach((q,i)=>{ if(q.c===focus){ const a=answers[i]||1; if(a<low){ low=a; focusSkill=q.skill; } } });
+    result={total,score,level,clusters,top,focus,focusSkill,answers:[...answers]};
+  }
+
+  function paint(){
+    animateNumber($('r-score'), result.score, 1100);
+    $('r-level').textContent = result.level;
+    $('r-msg').textContent = LEVEL_MSG[result.level];
+    drawRadar(result.clusters);
+    paintClusters(result.clusters);
+    paintAllSkills();
+    const s=STRENGTH[result.top];
+    $('r-strength-title').textContent=s.t; $('r-strength-body').textContent=s.b;
+    const f=FOCUS[result.focus];
+    $('r-focus-title').textContent = f.label.charAt(0).toUpperCase()+f.label.slice(1);
+    $('r-focus-body').innerHTML = f.why+' The best place to start is <strong>'+result.focusSkill+'</strong>: '+ACTIONS[result.focusSkill];
+  }
+
+  function animateNumber(el,to,dur){
+    const st=performance.now();
+    (function step(now){ const p=Math.min((now-st)/dur,1); const e=1-Math.pow(1-p,3); el.textContent=Math.round(e*to); if(p<1) requestAnimationFrame(step); })(performance.now());
+  }
+
+  function drawRadar(clusters){
+    const svg=$('radar'), C=200, R=105, NS="http://www.w3.org/2000/svg";
+    svg.innerHTML="";
+    const ang=i=>(-90+i*90)*Math.PI/180, pt=(i,r)=>[C+r*Math.cos(ang(i)), C+r*Math.sin(ang(i))];
+    [0.25,0.5,0.75,1].forEach((f,k)=>{
+      const poly=document.createElementNS(NS,'polygon');
+      poly.setAttribute('points',[0,1,2,3].map(i=>pt(i,R*f).join(',')).join(' '));
+      poly.setAttribute('fill','none');
+      poly.setAttribute('stroke', k===3?'#6B6355':'#4A443A');
+      poly.setAttribute('stroke-width', k===3?'1.5':'1');
+      svg.appendChild(poly);
+    });
+    [0,1,2,3].forEach(i=>{
+      const [x,y]=pt(i,R); const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',C);l.setAttribute('y1',C);l.setAttribute('x2',x);l.setAttribute('y2',y);
+      l.setAttribute('stroke','#413B31');l.setAttribute('stroke-width','1'); svg.appendChild(l);
+    });
+    const labels=[["Sharp","Thinking"],["Operating","With AI"],["Reach &","Influence"],["The Human","Edge"]];
+    const pos=[{x:200,y:16,a:'middle'},{x:398,y:184,a:'end'},{x:200,y:356,a:'middle'},{x:2,y:184,a:'start'}];
+    const mk=(x,y,a,fill,fs,fw)=>{const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor',a);t.setAttribute('fill',fill);t.setAttribute('font-size',fs);t.setAttribute('font-weight',fw);t.setAttribute('font-family','Poppins,sans-serif');return t;};
+    labels.forEach((lab,i)=>{
+      const p=pos[i];
+      lab.forEach((ln,j)=>{ const t=mk(p.x,p.y+j*15,p.a,'#D4CEC6','12','500'); t.textContent=ln; svg.appendChild(t); });
+      const v=mk(p.x,p.y+32,p.a,'#F3CB7D','12.5','600'); v.textContent=clusters[i].pct+'/100'; svg.appendChild(v);
+    });
+    const defs=document.createElementNS(NS,'defs');
+    defs.innerHTML='<linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3CB7D"/><stop offset="1" stop-color="#E89257"/></linearGradient>';
+    svg.appendChild(defs);
+    const poly=document.createElementNS(NS,'polygon');
+    poly.setAttribute('fill','rgba(243,203,125,.2)');poly.setAttribute('stroke','url(#rg)');poly.setAttribute('stroke-width','2.5');poly.setAttribute('stroke-linejoin','round');
+    svg.appendChild(poly);
+    const nodes=clusters.map(()=>{ const c=document.createElementNS(NS,'circle'); c.setAttribute('r','4.5'); c.setAttribute('fill','#F3CB7D'); svg.appendChild(c); return c; });
+    const targets=clusters.map(c=>c.pct/100), st=performance.now();
+    (function anim(now){
+      const p=Math.min((now-st)/950,1); const e=1-Math.pow(1-p,3);
+      const pts=targets.map((tf,i)=>pt(i,R*tf*e));
+      poly.setAttribute('points',pts.map(p=>p.join(',')).join(' '));
+      pts.forEach((p,i)=>{nodes[i].setAttribute('cx',p[0]);nodes[i].setAttribute('cy',p[1]);});
+      if(p<1) requestAnimationFrame(anim);
+    })(performance.now());
+  }
+
+  function paintClusters(clusters){
+    const wrap=$('r-clusters'); wrap.innerHTML='';
+    clusters.forEach(cl=>{
+      const flag = cl.key===result.top ? '<span class="cl-flag flag-top">Strength</span>'
+                 : cl.key===result.focus ? '<span class="cl-flag flag-focus">Focus here</span>' : '';
+      const div=document.createElement('div');
+      div.className='cl'+(cl.key===result.top?' top':cl.key===result.focus?' focus':'');
+      div.innerHTML=`<div class="cl-top"><span class="cl-name">${cl.name}${flag}</span><span class="cl-score">${cl.pct}/100</span></div><div class="cl-bar"><i data-w="${cl.pct}"></i></div>`;
+      wrap.appendChild(div);
+    });
+    requestAnimationFrame(()=>{ wrap.querySelectorAll('.cl-bar>i').forEach(el=>{ el.style.width=el.dataset.w+'%'; }); });
+  }
+
+  function paintAllSkills(){
+    const host=$('r-allskills'); host.innerHTML='';
+    ORDER.forEach(ck=>{
+      const cl=result.clusters.find(c=>c.key===ck);
+      const group=document.createElement('div'); group.className='skillgroup';
+      let rows='';
+      QUESTIONS.forEach((q,i)=>{
+        if(q.c!==ck) return;
+        const lv=result.answers[i]||1;
+        rows+=`<div class="skillrow"><span class="nm"><span class="dt d${lv}"></span>${q.skill}</span><span class="lv lvl${lv}">${LEVELS[lv-1]}</span></div>`;
+      });
+      group.innerHTML=`<div class="sg-head"><span class="sg-name">${CLUSTERS[ck]}</span><span class="sg-score">${cl.pct}/100</span></div>${rows}`;
+      host.appendChild(group);
+    });
+  }
+
+  function siteUrl(){ return CONFIG.SITE_URL || (location.origin+location.pathname); }
+  function shareText(){
+    return `I scored my skills against the 24 capabilities that compound as AI gets more capable. It gave me one clear thing to work on next. Curious where you'd land? ${siteUrl()}`;
+  }
+  async function share(){
+    const text=shareText();
+    if(navigator.share){ try{ await navigator.share({title:'The Relevance Score',text,url:siteUrl()}); return; }catch(e){} }
+    try{ await navigator.clipboard.writeText(text); toast('Copied, thanks for spreading it.'); }
+    catch(e){ toast('Copy this link: '+siteUrl()); }
+  }
+  function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+
+  function downloadPDF(){
+    const JS = window.jspdf && window.jspdf.jsPDF;
+    if(!JS){ toast('PDF is still loading, try again in a second.'); return; }
+    const doc = new JS({unit:'pt', format:'letter'});
+    const W=612, H=792, M=54; let y=64;
+    const CHARCOAL=[60,52,42], BLACK=[30,23,9], GOLD=[138,94,18], SIENNA=[168,80,31], MUTED=[133,124,110], LINE=[230,219,200], BARF=[184,132,31];
+    const cap = t => t.charAt(0).toUpperCase()+t.slice(1);
+    function ensure(h){ if(y+h > H-52){ doc.addPage(); y=64; } }
+    function para(txt,o){ o=o||{}; const size=o.size||10.5, lh=size*1.45, font=o.font||'helvetica', style=o.style||'normal', color=o.color||CHARCOAL, gap=(o.gap===undefined?9:o.gap);
+      doc.setFont(font,style); doc.setFontSize(size); doc.setTextColor(color[0],color[1],color[2]);
+      doc.splitTextToSize(txt, W-2*M).forEach(ln=>{ ensure(lh); doc.text(ln, M, y); y+=lh; }); y+=gap;
+    }
+    function kicker(txt){ ensure(20); doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(SIENNA[0],SIENNA[1],SIENNA[2]); doc.text(txt.toUpperCase(), M, y); y+=15; }
+    function rule(){ ensure(16); doc.setDrawColor(LINE[0],LINE[1],LINE[2]); doc.line(M,y,W-M,y); y+=20; }
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+    doc.text('T H E   R E L E V A N C E   S C O R E', M, y); y+=34;
+    doc.setFont('times','bold'); doc.setFontSize(40); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+    doc.text(result.score+'  / 100', M, y); y+=26;
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(BLACK[0],BLACK[1],BLACK[2]);
+    doc.text(result.level, M, y); y+=10;
+    rule();
+    kicker('Where you stand'); para(LEVEL_MSG[result.level]);
+    const s=STRENGTH[result.top];
+    kicker('Your strength'); para(s.t,{style:'bold',color:BLACK,size:12.5,gap:4}); para(s.b);
+    const f=FOCUS[result.focus];
+    kicker('Your focus area'); para(cap(f.label),{style:'bold',color:BLACK,size:12.5,gap:4});
+    para(f.why,{gap:5}); para('The best place to start is '+result.focusSkill+': '+ACTIONS[result.focusSkill],{color:SIENNA});
+    rule();
+    kicker('Your four clusters');
+    result.clusters.forEach(cl=>{ ensure(26);
+      doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]); doc.text(cl.name, M, y);
+      doc.setFont('helvetica','bold'); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]); doc.text(cl.pct+' / 100', W-M, y, {align:'right'}); y+=7;
+      doc.setFillColor(LINE[0],LINE[1],LINE[2]); doc.roundedRect(M, y, W-2*M, 5, 2.5,2.5,'F');
+      doc.setFillColor(BARF[0],BARF[1],BARF[2]); doc.roundedRect(M, y, (W-2*M)*cl.pct/100, 5, 2.5,2.5,'F'); y+=19;
+    });
+    y+=4; rule();
+    kicker('Every skill, by cluster');
+    ORDER.forEach(ck=>{ ensure(28);
+      doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(BLACK[0],BLACK[1],BLACK[2]); doc.text(CLUSTERS[ck], M, y); y+=15;
+      QUESTIONS.forEach((q,i)=>{ if(q.c!==ck) return; const lv=result.answers[i]||1; ensure(15);
+        doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]); doc.text(q.skill, M+6, y);
+        doc.setTextColor(SIENNA[0],SIENNA[1],SIENNA[2]); doc.text(LEVELS[lv-1], W-M, y, {align:'right'}); y+=14;
+      }); y+=7;
+    });
+    rule();
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+    doc.text('The Relevance by Shilpi Sneha   ·   Retake in 90 days to watch it grow.', M, y);
+    doc.save('my-relevance-score.pdf');
+    toast('Your results PDF is downloading.');
+  }
+
+  return {startIntro,startQuestions,back,next,reveal,share,downloadPDF};
+})();
+window.App = App;
+</script>
+</body>
+</html>
