@@ -4,9 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Relevance Score · How relevant is your skill set in the AI era?</title>
-<meta name="description" content="A 7-minute, honest read on the 24 human capabilities that compound as AI gets more capable, so you know exactly where to focus next." />
+<meta name="description" content="A 5-minute, honest read on the 18 human capabilities that compound as AI gets more capable, so you know exactly where to focus next." />
 <meta property="og:title" content="The Relevance Score" />
-<meta property="og:description" content="How relevant is your skill set in the AI era? Score yourself across 24 capabilities that compound with AI." />
+<meta property="og:description" content="How relevant is your skill set in the AI era? Score yourself across 18 capabilities that compound with AI." />
 <meta property="og:type" content="website" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -151,13 +151,16 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
 <div class="wrap">
   <div class="brand hidden" id="brand"><span class="name">The Relevance</span></div>
 
-  <!-- SCREEN 0 · LANDING -->
+  <!-- SCREEN 0 · LANDING + SIGN-UP GATE -->
   <section class="screen active vcenter landing" id="s-landing">
     <div class="eyebrow">The Relevance Score</div>
     <h1>How relevant is your skill set <span class="gold">in the AI era?</span></h1>
-    <p class="sub">See where you stand on the <strong>24 human capabilities</strong> that compound as AI gets more capable, so you know exactly where to focus next.</p>
-    <button class="btn" onclick="App.startIntro()">Find my Relevance Score →</button>
-    <div class="trust">Built on research and analysis from 50+ tech, business, and AI voices, synthesized into the 24 skills that actually compound with AI.</div>
+    <p class="sub">Sign up to take the assessment. In about 5 minutes you'll see where you stand across <strong>18 capabilities</strong> that compound as AI gets more capable, and you'll get your results as a PDF to keep.</p>
+    <div class="embed-box" id="beehiiv-slot">
+      <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="e4f13cd2-4658-4aa1-83c8-21d83ede025e"></script>
+    </div>
+    <button class="btn" onclick="App.startIntro()">Start the assessment →</button>
+    <div class="trust">Built on research and analysis from 50+ tech, business, and AI voices, synthesized into the 18 skills that actually compound with AI.</div>
   </section>
 
   <!-- SCREEN 1 · PRIMING -->
@@ -169,7 +172,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
 
   <!-- QUESTION -->
   <section class="screen" id="s-question">
-    <div class="qhead"><span class="qtag" id="q-tag">Sharp Thinking</span><span class="qcount" id="q-count">Question 1 of 24</span></div>
+    <div class="qhead"><span class="qtag" id="q-tag">Sharp Thinking</span><span class="qcount" id="q-count">Question 1 of 18</span></div>
     <div class="pbar"><i id="q-bar"></i></div>
     <div class="qprompt" id="q-prompt"></div>
     <div class="options" id="q-options"></div>
@@ -183,7 +186,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
   <!-- CALCULATING -->
   <section class="screen calc" id="s-calc">
     <div class="spinner"></div>
-    <div class="msg" id="calc-msg">Scoring your 24 answers…</div>
+    <div class="msg" id="calc-msg">Scoring your 18 answers…</div>
   </section>
 
   <!-- RESULTS -->
@@ -228,7 +231,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
     <div class="divider"></div>
     <div class="actions">
       <div class="share-row">
-        <button class="btn btn-ghost" onclick="App.downloadPDF()">Download my results (PDF)</button>
+        <button class="btn btn-ghost" onclick="App.downloadPDF()">Download my score (PDF)</button>
         <button class="btn btn-ghost" onclick="App.share()">Share my score</button>
       </div>
       <p class="footnote">Come back in 90 days and retake it. Relevance is a muscle, and this is how you watch it grow.</p>
@@ -244,33 +247,23 @@ const CONFIG = { SITE_URL:"", NEWSLETTER:"The Relevance by Shilpi Sneha" };
 const CLUSTERS = { sharp:"Sharp Thinking", ai:"Operating With AI", reach:"Reach & Influence", human:"The Human Edge" };
 
 const QUESTIONS = [
-  {c:"sharp",skill:"Discernment",prompt:"When something convincing comes your way, whether a plan, an argument, or a piece of work, what's your instinct?",
-   opts:["If it sounds convincing, I usually take it as good and move on.","I trust my gut, but couldn't always say why.","I can tell quickly what's genuinely strong versus just well-polished.","People bring me things specifically to get my read on whether they're actually good."]},
-  {c:"sharp",skill:"Critical Thinking",prompt:"When you're evaluating an argument or a plan, what do you actually do?",
-   opts:["If the logic sounds reasonable, I usually take it at face value.","I'll question it when something feels off, though I don't always dig into why.","I test the reasoning, looking for the weak links and the assumptions underneath.","I routinely pressure-test ideas before they move forward, and people rely on me to catch what others miss."]},
-  {c:"sharp",skill:"Judgment",prompt:"When you have to make the call, with no clear right answer and real trade-offs, what happens?",
-   opts:["I'd rather get more input or let it settle before I commit.","I make the call, but I tend to second-guess it afterward.","I weigh the trade-offs and commit, even without full certainty.","People come to me specifically to make the hard call."]},
-  {c:"sharp",skill:"Decision Making",prompt:"Think about how you actually move from options to a decision. What's your pattern?",
-   opts:["I like to gather plenty of input, so decisions can take a while to land.","I decide, but slowly, and I often revisit the same decision.","I decide at the right speed for the stakes, and I don't relitigate once it's made.","I have a clear way of deciding when to go fast, slow down, or loop others in, and people trust my process."]},
+  {c:"sharp",skill:"Discernment & Critical Thinking",prompt:"When you're weighing an argument, a plan, or a piece of work, what do you actually do?",
+   opts:["If it sounds convincing, I usually take it as solid and move on.","I'll question it when something feels off, though I don't always dig into why.","I test the reasoning, and I can tell quickly what's genuinely strong from what's just well-polished.","People bring me things specifically to pressure-test, because my read tends to catch what others miss."]},
+  {c:"sharp",skill:"Judgment & Decision Making",prompt:"When you face a hard call with real trade-offs, how do you handle it?",
+   opts:["I put it off, over-gather input, or let it drift.","I decide, but slowly, and I often second-guess or revisit it.","I weigh the trade-offs, commit at the right speed for the stakes, and don't relitigate.","People bring me their hardest calls, because they trust both my judgment and how I decide."]},
   {c:"sharp",skill:"Systems Thinking",prompt:"When you make a decision, how far do you trace its effects?",
    opts:["I focus on the immediate task in front of me.","I consider the obvious knock-on effect when it comes up.","I map how a change ripples across people, timelines, and other work.","I design decisions around the whole system, second and third-order effects included."]},
-  {c:"sharp",skill:"Creative Thinking",prompt:"When you're stuck on a problem or staring at a blank page, what usually gets you moving?",
-   opts:["I usually go with the first solid idea, or the tried and true approach.","I try a couple of angles, but usually land close to what's expected.","I actively hunt for unlikely combinations and unusual angles until something clicks.","I regularly land on ideas that surprise people, ones no one else in the room saw."]},
+  {c:"sharp",skill:"Original & Creative Thinking",prompt:"When you're creating something or facing a fresh problem, where do your ideas come from?",
+   opts:["I mostly take the obvious approach or adapt what already exists.","I try a few angles, but usually land close to what's expected.","I hunt for unexpected angles and form my own take, then use tools to sharpen it.","People can spot my ideas as distinctly mine, and I often see something no one else did."]},
   {c:"sharp",skill:"Taste",prompt:"When you're weighing options that all technically work, say a design, a message, or a direction, what guides your pick?",
    opts:["They all look fine to me, so I go with whatever's easiest.","I have a preference, but couldn't always explain what makes one better.","I have a clear, consistent sense of what's actually good, and I can say why.","People seek out my eye specifically, and what I pick tends to hold up over time."]},
-  {c:"sharp",skill:"Original Thinking",prompt:"When you create something, whether a document, a plan, or a piece of work, where does the point of view come from?",
-   opts:["I mostly start from what already exists, a template, an AI draft, or a model I've seen, and follow its lead.","I start from something existing, but I put my own spin on it so it doesn't feel generic.","I form my own angle first, then use tools to sharpen it.","People can spot my work in a crowd because the take is distinctly mine."]},
 
   {c:"ai",skill:"AI Fluency",prompt:"Thinking about the last month, how does AI show up in your day-to-day work?",
    opts:["Barely yet. I've tried it, but it's not part of how I work.","I reach for it on quick one-offs when I remember to.","It's part of my daily workflow across several kinds of tasks.","I've reshaped how I work around it, woven into subtasks throughout my day rather than a separate step I switch to."]},
-  {c:"ai",skill:"Problem Framing",prompt:"Before you hand anything to AI, how much shaping does the problem get first?",
-   opts:["I hand over whatever's in my head and see what comes back.","I add a bit of context, but mostly wing the framing.","I break the problem into clear pieces and define what good looks like before I start.","My framing is tight enough that much of the work is settled before AI touches it, and colleagues bring me their problems to help scope."]},
-  {c:"ai",skill:"Agent Orchestration",prompt:"When you hand a bigger task to AI, how do you set it up to run reliably?",
-   opts:["I haven't handed off anything bigger than a quick, one-shot ask yet.","I give it a prompt and take what comes back.","I set it up with the steps, tools, and context it needs to work through the task.","I direct AI like a small team, multi-step, multi-tool, with checks and guardrails, the way I'd direct people."]},
-  {c:"ai",skill:"AI Oversight",prompt:"While AI is doing the work, or right after, how involved do you stay?",
-   opts:["I set it running and pick it up when it's done; watching the process isn't a habit yet.","I glance at the output, but I don't really watch how it got there.","I check in at key points and redirect it when it drifts off track.","I supervise it like a report, with checkpoints along the way, catching drift early and stepping in before small errors compound."]},
-  {c:"ai",skill:"Verification",prompt:"When AI hands you a finished answer, how do you know it's actually right?",
-   opts:["If it looks fine, I usually take it as-is; close checking isn't a habit yet.","I skim for anything that jumps out as obviously off.","I check the parts the decision actually rests on and fix what's weak.","I verify it like a critical report, tracing key claims back to source, and I catch confident-but-wrong answers that slip past others."]},
+  {c:"ai",skill:"Framing & Directing AI",prompt:"When you hand real work to AI, how do you set it up?",
+   opts:["I type what's in my head and take whatever comes back.","I add some context, but mostly wing it and hope for the best.","I shape the problem first (goal, context, what good looks like) and give it the steps to work through.","I set AI up like a small team, framing the task and directing it across steps and tools, and others come to me to scope theirs."]},
+  {c:"ai",skill:"Checking AI's Work",prompt:"Once AI is working, or has finished, how closely do you check it?",
+   opts:["If it looks fine, I take it as-is; watching or checking isn't a habit yet.","I skim the output for anything obviously off.","I stay with it as it works, and I check the parts that matter, fixing what's weak.","I supervise it like a report and verify like a critical one, catching drift early and confident-but-wrong answers others miss."]},
 
   {c:"reach",skill:"Storytelling & Communication",prompt:"When you need to make something land, whether an idea, an update, or a pitch, how does it usually go?",
    opts:["I lay out the facts clearly and let them speak for themselves.","I explain it clearly, though it doesn't always stick.","I build a story around the point, in my own voice, and it usually connects.","People remember and repeat how I framed it, and the message travels without me in the room."]},
@@ -285,10 +278,8 @@ const QUESTIONS = [
    opts:["I'm still figuring it out; I don't have a clear read yet.","I have a rough sense, but it's mostly my own view and I don't act on it much.","I know my strengths and gaps, I've tested them against candid feedback, and I steer my work toward what energizes me.","Colleagues consistently route the right work to me because my strengths are visible and reliable; I seek feedback on my blind spots and design my growth around where I add the most value."]},
   {c:"human",skill:"Focus",prompt:"Between the pings, the meetings, and the open tabs, how does undistracted focus actually happen in your week?",
    opts:["Honestly, it mostly doesn't yet; my day goes to whatever's most urgent.","I know which work deserves deep focus and try to protect time, but it usually loses to what's urgent.","I regularly protect real blocks of undistracted focus, and most weeks the important deep work gets its time.","My calendar and role are built around focus: protected deep-work blocks are fixed and defended, and people plan around them so I can do the high-value work only I can do."]},
-  {c:"human",skill:"Adaptability & Resilience",prompt:"When your world of work shifts under you, whether a reorg, a change in priorities, or a new manager or role, how do you hold up and recover?",
-   opts:["Big changes throw me for a while before I find my footing.","I adjust eventually, once the dust settles.","I steady myself and find my footing fairly fast, then keep moving.","I treat change as normal and stay grounded through it, and others lean on me to steady them when things shift."]},
-  {c:"human",skill:"Learning Velocity",prompt:"When you need a new skill or tool, how fast do you pick it up, and how often are you doing this?",
-   opts:["I pick it up when I really have to, and lean on workarounds until then.","I get there eventually, but it's slow, and I usually need a deadline or a push.","When I decide I need something, I teach it to myself and am productive within a few weeks, including tools I've never touched.","I'm learning new tools constantly and apply them to unfamiliar problems fast; it's a habit, not an event, and people treat me as the go-to fast learner."]},
+  {c:"human",skill:"Adapting & Learning",prompt:"When your work changes or a new skill or tool lands on you, how do you respond?",
+   opts:["It throws me, and I put off picking up the new thing until I have to.","I adjust and get there eventually, once the dust settles and there's time.","I steady myself fast and teach myself what I need within a few weeks.","I treat change as normal and learn constantly, and others lean on me to steady them and to pick things up first."]},
   {c:"human",skill:"Agency & Ownership",prompt:"When you take on a piece of work, how much of the outcome do you treat as yours?",
    opts:["I focus on the tasks I'm handed; the wider outcome is someone else's call.","I flag the risks and gaps I spot, then wait for direction on what to do about them.","I take responsibility for getting my work to a real result, not just completing the steps.","I own the outcome end to end: I anticipate what's needed, move without waiting to be told, and carry it through even when it gets messy."]},
   {c:"human",skill:"Leadership Under Ambiguity",prompt:"When a group around you is unsure what to do, how do you show up?",
@@ -301,7 +292,7 @@ const ORDER = ["sharp","ai","reach","human"];
 const LEVELS = ["Emerging","Building","Practicing","Compounding"];
 
 const LEVEL_MSG = {
-  Emerging:"You can see where you stand, and that clarity is what makes progress possible. Every skill here is learnable. Don't spread yourself across all 24. Take your focus area below and give it a real attempt this week. That first rep is what gets you moving.",
+  Emerging:"You can see where you stand, and that clarity is what makes progress possible. Every skill here is learnable. Don't try to fix everything at once. Take your focus area below and give it a real attempt this week. That first rep is what gets you moving.",
   Building:"You're already using several of these, just not consistently. Your next gain comes from steadiness: turning an occasional effort into a habit you can count on. Take your focus area below and put it on a set schedule this week, even fifteen minutes a day. Steady reps are what move your score.",
   Practicing:"You use these deliberately, and it shows in your work. Your next level is depth: pushing your strongest area further while closing the one gap that holds the rest back. Bring your focus area below up to the standard of your best cluster. That's the point where your skills start reinforcing each other.",
   Compounding:"These are second nature for you now, and they're multiplying what you can do. Your move from here is leverage: turn instinct into systems that run without you. Bring your focus area below up to speed, then package your strongest skill into something repeatable others can use. That's how it scales."
@@ -323,27 +314,21 @@ const FOCUS = {
 };
 
 const ACTIONS = {
-  "Discernment":"next time something impressive comes your way, pause before you buy in and ask what would have to be true for it to be wrong.",
-  "Critical Thinking":"on your next big decision, write down the main assumption it rests on, then go looking for evidence that it's wrong.",
-  "Judgment":"take a hard call you're weighing, lay out the real trade-offs on each side, and get clear on which downsides you can live with.",
-  "Decision Making":"for your next decision, decide up front whether it's reversible; if it is, choose quickly and stop revisiting it.",
+  "Discernment & Critical Thinking":"next time something impressive comes your way, pause before you buy in: name the main assumption it rests on and look for where it's weak.",
+  "Judgment & Decision Making":"take a hard call you're weighing, lay out the trade-offs on each side, decide which downsides you can live with, and commit at the right speed.",
   "Systems Thinking":"before your next change, trace it a few steps out: who it touches, what it shifts downstream, and what it sets in motion later.",
-  "Creative Thinking":"on your next stuck problem, push out three unexpected options before you let yourself take the obvious one.",
+  "Original & Creative Thinking":"on your next problem or piece of work, put your own angle down first, before any template or AI draft, and push for one option no one else would reach for.",
   "Taste":"take one piece of work you think is genuinely great and pin down exactly what makes it great; the more precisely you can name it, the more you can repeat it.",
-  "Original Thinking":"next time you make something, put your own angle down first, before you open a template or an AI draft.",
   "AI Fluency":"pick one routine task you'd normally do yourself and try it with AI tomorrow; notice where it helps and where it doesn't.",
-  "Problem Framing":"before your next AI request, get clear on what you actually want (the goal, who it's for, what a good result looks like) and hand AI that, not just the task.",
-  "Agent Orchestration":"take one multi-step task and set AI up to run it in stages, giving it the context and tools each step needs.",
-  "AI Oversight":"on your next AI task, follow along as it works instead of only checking the end, and step in the moment it drifts off track.",
-  "Verification":"next time AI gives you an answer, pressure-test the whole of it, the reasoning and judgment calls as much as the facts and figures, and lean hardest on the parts where it's interpreting, not just reporting.",
+  "Framing & Directing AI":"before your next AI task, get clear on the goal and what a good result looks like, then set it up in steps instead of one big ask.",
+  "Checking AI's Work":"on your next AI output, follow it as it works and trace one load-bearing claim back to its source before you rely on it.",
   "Storytelling & Communication":"on your next update, lead with what it means for the people hearing it, then give them the detail.",
   "Point of View & Sensemaking":"write one short take on something moving in your field, and say clearly where you land and why.",
   "Distribution & Audience":"pick one thing you've made and put it where your audience actually spends time, not just wherever's easiest to post.",
   "Building & Shipping":"take one idea that's been sitting and ship the smallest real version of it this week, done over perfect.",
   "Self-Awareness & Motivation":"look back at the work that energized you most this month and the work that drained you; the pattern points to where you're at your best.",
   "Focus":"block one ninety-minute stretch this week for your most important work, with your phone in another room.",
-  "Adaptability & Resilience":"next time something shifts unexpectedly, name the one thing you can control right now and start there.",
-  "Learning Velocity":"pick one skill or tool you've been meaning to learn and give it thirty focused minutes this week to get past the intimidation.",
+  "Adapting & Learning":"pick one skill or tool you've been meaning to learn and give it thirty focused minutes this week; treat the change as practice, not a threat.",
   "Agency & Ownership":"pick one outcome you genuinely care about and take ownership of carrying it to done, including the parts that aren't strictly your job.",
   "Leadership Under Ambiguity":"in your next group discussion where no one's sure what to do, put a clear direction on the table and offer to take the first step.",
   "Relationship & Community Building":"invest in one relationship or community around your work this week with no ask attached: a genuine check-in, an introduction you can make, or showing up for someone."
@@ -396,7 +381,7 @@ const App = (function(){
 
   function reveal(){
     compute(); show('s-calc');
-    const msgs=["Scoring your 24 answers…","Mapping your quadrant…","Finding your focus area…"];
+    const msgs=["Scoring your 18 answers…","Mapping your quadrant…","Finding your focus area…"];
     let m=0; $('calc-msg').textContent=msgs[0];
     const t=setInterval(()=>{ m++; if(m<msgs.length) $('calc-msg').textContent=msgs[m]; },600);
     setTimeout(()=>{ clearInterval(t); paint(); show('s-results'); },1900);
@@ -405,7 +390,7 @@ const App = (function(){
   function compute(){
     const total = answers.reduce((a,b)=>a+(b||1),0);
     const score = Math.round(total/(QUESTIONS.length*4)*100);
-    let level = total<=41?"Emerging":total<=59?"Building":total<=77?"Practicing":"Compounding";
+    let level = total<=31?"Emerging":total<=45?"Building":total<=58?"Practicing":"Compounding";
     const sums={},counts={}; ORDER.forEach(c=>{sums[c]=0;counts[c]=0;});
     QUESTIONS.forEach((q,i)=>{ sums[q.c]+=(answers[i]||1); counts[q.c]++; });
     const clusters = ORDER.map(c=>{ const avg=sums[c]/counts[c]; return {key:c,name:CLUSTERS[c],avg,pct:Math.round(avg/4*100)}; });
@@ -509,7 +494,7 @@ const App = (function(){
 
   function siteUrl(){ return CONFIG.SITE_URL || (location.origin+location.pathname); }
   function shareText(){
-    return `I scored my skills against the 24 capabilities that compound as AI gets more capable. It gave me one clear thing to work on next. Curious where you'd land? ${siteUrl()}`;
+    return `I scored my skills against the 18 capabilities that compound as AI gets more capable. It gave me one clear thing to work on next. Curious where you'd land? ${siteUrl()}`;
   }
   async function share(){
     const text=shareText();
@@ -547,28 +532,11 @@ const App = (function(){
     const f=FOCUS[result.focus];
     kicker('Your focus area'); para(cap(f.label),{style:'bold',color:BLACK,size:12.5,gap:4});
     para(f.why,{gap:5}); para('The best place to start is '+result.focusSkill+': '+ACTIONS[result.focusSkill],{color:SIENNA});
-    rule();
-    kicker('Your four clusters');
-    result.clusters.forEach(cl=>{ ensure(26);
-      doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]); doc.text(cl.name, M, y);
-      doc.setFont('helvetica','bold'); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]); doc.text(cl.pct+' / 100', W-M, y, {align:'right'}); y+=7;
-      doc.setFillColor(LINE[0],LINE[1],LINE[2]); doc.roundedRect(M, y, W-2*M, 5, 2.5,2.5,'F');
-      doc.setFillColor(BARF[0],BARF[1],BARF[2]); doc.roundedRect(M, y, (W-2*M)*cl.pct/100, 5, 2.5,2.5,'F'); y+=19;
-    });
-    y+=4; rule();
-    kicker('Every skill, by cluster');
-    ORDER.forEach(ck=>{ ensure(28);
-      doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(BLACK[0],BLACK[1],BLACK[2]); doc.text(CLUSTERS[ck], M, y); y+=15;
-      QUESTIONS.forEach((q,i)=>{ if(q.c!==ck) return; const lv=result.answers[i]||1; ensure(15);
-        doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]); doc.text(q.skill, M+6, y);
-        doc.setTextColor(SIENNA[0],SIENNA[1],SIENNA[2]); doc.text(LEVELS[lv-1], W-M, y, {align:'right'}); y+=14;
-      }); y+=7;
-    });
-    rule();
+    y+=8; rule();
     doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
-    doc.text('The Relevance by Shilpi Sneha   ·   Retake in 90 days to watch it grow.', M, y);
+    doc.text('The Relevance by Shilpi Sneha   ·   See your full breakdown any time, and retake in 90 days to watch it grow.', M, y);
     doc.save('my-relevance-score.pdf');
-    toast('Your results PDF is downloading.');
+    toast('Your score PDF is downloading.');
   }
 
   return {startIntro,startQuestions,back,next,reveal,share,downloadPDF};
