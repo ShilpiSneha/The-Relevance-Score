@@ -75,7 +75,8 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
 
 .gate h2{font-size:clamp(24px,4.2vw,32px);margin-bottom:14px}
 .gate p{color:var(--muted);font-size:16px;max-width:580px;margin-bottom:24px}
-.embed-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:22px;max-width:520px}
+.embed-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:22px;max-width:520px;min-height:150px;display:flex;flex-direction:column;justify-content:center}
+.embed-loading{color:var(--faint);font-size:14px;text-align:center;padding:20px 0}
 .embed-note{font-size:13px;color:var(--faint);margin-top:10px}
 
 .calc{justify-content:center;flex:1}
@@ -161,6 +162,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
     <h1>How relevant is your skill set <span class="gold">in the AI era?</span></h1>
     <p class="sub">Sign up to take the assessment. In about 5 minutes you'll see where you stand across <strong>18 capabilities</strong> that compound as AI gets more capable, and you'll get your results as a PDF to keep.</p>
     <div class="embed-box" id="beehiiv-slot">
+      <div id="signup-loading" class="embed-loading">Saving you a seat…</div>
       <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="e4f13cd2-4658-4aa1-83c8-21d83ede025e"></script>
     </div>
     <button class="btn" onclick="App.startIntro()">Start the assessment →</button>
@@ -529,35 +531,38 @@ const App = (function(){
     if(!JS){ toast('PDF is still loading, try again in a second.'); return; }
     const doc = new JS({unit:'pt', format:'letter'});
     const W=612, H=792, M=54; let y=64;
-    const CHARCOAL=[60,52,42], BLACK=[30,23,9], GOLD=[138,94,18], SIENNA=[168,80,31], MUTED=[133,124,110], LINE=[230,219,200], BARF=[184,132,31];
-    const cap = t => t.charAt(0).toUpperCase()+t.slice(1);
-    function ensure(h){ if(y+h > H-52){ doc.addPage(); y=64; } }
-    function para(txt,o){ o=o||{}; const size=o.size||10.5, lh=size*1.45, font=o.font||'helvetica', style=o.style||'normal', color=o.color||CHARCOAL, gap=(o.gap===undefined?9:o.gap);
+    const GOLD=[243,203,125], AMBER=[232,146,87], INK=[236,237,234], DESC=[212,206,198], MUTED=[183,176,164], FAINT=[138,132,122], DIV=[74,68,58];
+    const LVLC={Emerging:[180,189,203],Building:[130,184,232],Practicing:[130,204,161],Compounding:[199,166,236]};
+    function paintBg(){ doc.setFillColor(0,0,0); doc.rect(0,0,W,H,'F'); }
+    paintBg();
+    function ensure(h){ if(y+h > H-52){ doc.addPage(); paintBg(); y=64; } }
+    function para(txt,o){ o=o||{}; const size=o.size||10.5, lh=size*1.5, font=o.font||'helvetica', style=o.style||'normal', color=o.color||INK, gap=(o.gap===undefined?9:o.gap);
       doc.setFont(font,style); doc.setFontSize(size); doc.setTextColor(color[0],color[1],color[2]);
       doc.splitTextToSize(txt, W-2*M).forEach(ln=>{ ensure(lh); doc.text(ln, M, y); y+=lh; }); y+=gap;
     }
-    function kicker(txt){ ensure(20); doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(SIENNA[0],SIENNA[1],SIENNA[2]); doc.text(txt.toUpperCase(), M, y); y+=15; }
-    function rule(){ ensure(16); doc.setDrawColor(LINE[0],LINE[1],LINE[2]); doc.line(M,y,W-M,y); y+=20; }
+    function kicker(txt){ ensure(20); doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(AMBER[0],AMBER[1],AMBER[2]); doc.text(txt.toUpperCase(), M, y); y+=15; }
+    function rule(){ ensure(16); doc.setDrawColor(DIV[0],DIV[1],DIV[2]); doc.line(M,y,W-M,y); y+=20; }
 
     doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
     doc.text('T H E   R E L E V A N C E   S C O R E', M, y); y+=34;
     doc.setFont('times','bold'); doc.setFontSize(40); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
     doc.text(result.score+'  / 100', M, y); y+=26;
-    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(BLACK[0],BLACK[1],BLACK[2]);
+    var _lc=LVLC[result.level]||INK;
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(_lc[0],_lc[1],_lc[2]);
     doc.text(result.level, M, y); y+=10;
     rule();
     kicker('Where you stand'); para(LEVEL_MSG[result.level]);
-    kicker('Your strength'); para(CLUSTERS[result.top],{style:'bold',color:BLACK,size:12.5,gap:4});
+    kicker('Your strength'); para(CLUSTERS[result.top],{style:'bold',color:INK,size:12.5,gap:4});
     para(STRENGTH[result.top]+' Your sharpest edge here is '+result.topSkill+': '+STRENGTH_SKILL[result.topSkill]);
-    kicker('Your focus area'); para(CLUSTERS[result.focus],{style:'bold',color:BLACK,size:12.5,gap:4});
-    para(FOCUS[result.focus],{gap:5}); para('The best place to start is '+result.focusSkill+': '+ACTIONS[result.focusSkill],{color:SIENNA});
+    kicker('Your focus area'); para(CLUSTERS[result.focus],{style:'bold',color:INK,size:12.5,gap:4});
+    para(FOCUS[result.focus],{gap:5}); para('The best place to start is '+result.focusSkill+': '+ACTIONS[result.focusSkill],{color:AMBER});
     y+=8; rule();
 
     // Your four clusters at a glance
     kicker('Your four clusters at a glance');
     result.clusters.forEach(cl=>{
       ensure(17);
-      doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]);
+      doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(DESC[0],DESC[1],DESC[2]);
       doc.text(cl.name, M, y);
       doc.setFont('helvetica','bold'); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
       doc.text(cl.pct+'/100', W-M, y, {align:'right'});
@@ -571,26 +576,27 @@ const App = (function(){
       const cl=result.clusters.find(c=>c.key===ck);
       const rowCount=QUESTIONS.filter(q=>q.c===ck).length;
       ensure(34 + rowCount*14);
-      doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(BLACK[0],BLACK[1],BLACK[2]);
+      doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(INK[0],INK[1],INK[2]);
       doc.text(CLUSTERS[ck], M, y);
       doc.setFontSize(9.5); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
       doc.text(cl.pct+'/100', W-M, y, {align:'right'});
       y+=6;
-      doc.setDrawColor(LINE[0],LINE[1],LINE[2]); doc.line(M,y,W-M,y); y+=14;
+      doc.setDrawColor(DIV[0],DIV[1],DIV[2]); doc.line(M,y,W-M,y); y+=14;
       QUESTIONS.forEach((q,i)=>{
         if(q.c!==ck) return;
         const lv=result.answers[i]||1;
         ensure(15);
-        doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]);
+        doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(DESC[0],DESC[1],DESC[2]);
         doc.text(q.skill, M, y);
-        doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+        var _slc=LVLC[LEVELS[lv-1]]||MUTED;
+        doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(_slc[0],_slc[1],_slc[2]);
         doc.text(LEVELS[lv-1], W-M, y, {align:'right'});
         y+=14;
       });
       y+=8;
     });
     y+=2; rule();
-    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(FAINT[0],FAINT[1],FAINT[2]);
     doc.text('The Relevance by Shilpi Sneha   ·   Retake in 90 days to watch it grow.', M, y);
     doc.save('my-relevance-score.pdf');
     toast('Your score PDF is downloading.');
@@ -599,6 +605,16 @@ const App = (function(){
   return {startIntro,startQuestions,back,next,reveal,downloadPDF};
 })();
 window.App = App;
+
+// Remove the "Loading sign-up…" placeholder as soon as the Beehiiv form reports in.
+window.addEventListener('message', function(e){
+  if(e.origin !== 'https://subscribe-forms.beehiiv.com') return;
+  var d = e.data;
+  if(d && typeof d.type === 'string' && d.type.indexOf('beehiiv:') === 0){
+    var ph = document.getElementById('signup-loading');
+    if(ph) ph.remove();
+  }
+});
 </script>
 </body>
 </html>
