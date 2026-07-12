@@ -542,6 +542,36 @@ const App = (function(){
     }
     function kicker(txt){ ensure(20); doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(AMBER[0],AMBER[1],AMBER[2]); doc.text(txt.toUpperCase(), M, y); y+=15; }
     function rule(){ ensure(16); doc.setDrawColor(DIV[0],DIV[1],DIV[2]); doc.line(M,y,W-M,y); y+=20; }
+    function radarPt(cx,cy,i,rr){ if(i===0)return[cx,cy-rr]; if(i===1)return[cx+rr,cy]; if(i===2)return[cx,cy+rr]; return[cx-rr,cy]; }
+    function drawRadar(){
+      var R=76, cx=W/2, topPad=26, botPad=32;
+      ensure(topPad + 2*R + botPad);
+      var cy=y+topPad+R;
+      var pct={}; result.clusters.forEach(function(c){ pct[c.key]=c.pct; });
+      // grid rings
+      doc.setLineWidth(0.5); doc.setDrawColor(DIV[0],DIV[1],DIV[2]);
+      [0.25,0.5,0.75,1].forEach(function(f){
+        var p=[radarPt(cx,cy,0,R*f),radarPt(cx,cy,1,R*f),radarPt(cx,cy,2,R*f),radarPt(cx,cy,3,R*f)];
+        doc.lines([[p[1][0]-p[0][0],p[1][1]-p[0][1]],[p[2][0]-p[1][0],p[2][1]-p[1][1]],[p[3][0]-p[2][0],p[3][1]-p[2][1]]],p[0][0],p[0][1],[1,1],'S',true);
+      });
+      // axes
+      [[cx,cy-R],[cx+R,cy],[cx,cy+R],[cx-R,cy]].forEach(function(v){ doc.line(cx,cy,v[0],v[1]); });
+      // data polygon (filled gold shape + gold outline)
+      var order=['sharp','ai','reach','human'];
+      var dp=order.map(function(k,i){ return radarPt(cx,cy,i,R*((pct[k]||0)/100)); });
+      doc.setFillColor(92,74,40); doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]); doc.setLineWidth(1.4);
+      doc.lines([[dp[1][0]-dp[0][0],dp[1][1]-dp[0][1]],[dp[2][0]-dp[1][0],dp[2][1]-dp[1][1]],[dp[3][0]-dp[2][0],dp[3][1]-dp[2][1]]],dp[0][0],dp[0][1],[1,1],'FD',true);
+      doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);
+      dp.forEach(function(p){ doc.circle(p[0],p[1],1.8,'F'); });
+      doc.setLineWidth(0.2);
+      // vertex labels
+      doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(DESC[0],DESC[1],DESC[2]);
+      doc.text('Sharp Thinking',cx,cy-R-8,{align:'center'});
+      doc.text('Operating With AI',cx+R+8,cy+3,{align:'left'});
+      doc.text('Reach & Influence',cx,cy+R+18,{align:'center'});
+      doc.text('The Human Edge',cx-R-8,cy+3,{align:'right'});
+      y=cy+R+botPad;
+    }
 
     doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
     doc.text('T H E   R E L E V A N C E   S C O R E', M, y); y+=34;
@@ -560,6 +590,7 @@ const App = (function(){
 
     // Your four clusters at a glance
     kicker('Your four clusters at a glance');
+    drawRadar();
     result.clusters.forEach(cl=>{
       ensure(17);
       doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(DESC[0],DESC[1],DESC[2]);
