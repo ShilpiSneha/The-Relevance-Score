@@ -88,6 +88,10 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
 .scorenum{font-family:'Lora',serif;font-weight:700;font-size:clamp(60px,13vw,96px);line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .scoreden{font-family:'Lora',serif;font-size:clamp(22px,4vw,28px);color:var(--faint)}
 .levelbadge{display:inline-block;margin-top:12px;padding:8px 20px;border-radius:999px;background:rgba(243,203,125,.1);border:1px solid var(--gold-deep);color:var(--gold);font-weight:600;font-size:14px;letter-spacing:.05em}
+.levelbadge.lb1{background:rgba(148,160,176,.16);border-color:#6E7A8A;color:#B4BDCB}
+.levelbadge.lb2{background:rgba(95,159,219,.16);border-color:#3E6E9E;color:#82B8E8}
+.levelbadge.lb3{background:rgba(95,185,138,.16);border-color:#3E8560;color:#82CCA1}
+.levelbadge.lb4{background:rgba(181,139,224,.16);border-color:#7E5CA8;color:#C7A6EC}
 .res-confirm{color:var(--faint);font-size:13px;margin-top:14px}
 .res-msg{font-family:'Lora',serif;font-weight:500;font-size:clamp(17px,2.4vw,20px);line-height:1.55;color:var(--ink);max-width:620px;margin:20px 0 0}
 
@@ -232,7 +236,6 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
     <div class="actions">
       <div class="share-row">
         <button class="btn btn-ghost" onclick="App.downloadPDF()">Download my score (PDF)</button>
-        <button class="btn btn-ghost" onclick="App.share()">Share my score</button>
       </div>
       <p class="footnote">Come back in 90 days and retake it. Relevance is a muscle, and this is how you watch it grow.</p>
     </div>
@@ -294,23 +297,45 @@ const LEVELS = ["Emerging","Building","Practicing","Compounding"];
 const LEVEL_MSG = {
   Emerging:"You can see where you stand, and that clarity is what makes progress possible. Every skill here is learnable. Don't try to fix everything at once. Take your focus area below and give it a real attempt this week. That first rep is what gets you moving.",
   Building:"You're already using several of these, just not consistently. Your next gain comes from steadiness: turning an occasional effort into a habit you can count on. Take your focus area below and put it on a set schedule this week, even fifteen minutes a day. Steady reps are what move your score.",
-  Practicing:"You use these deliberately, and it shows in your work. Your next level is depth: pushing your strongest area further while closing the one gap that holds the rest back. Bring your focus area below up to the standard of your best cluster. That's the point where your skills start reinforcing each other.",
+  Practicing:"You use these deliberately, and it shows in your work. What's left is depth. Your focus area below is the one lagging behind the rest — bring it up to the level of your strongest, and your skills start reinforcing each other.",
   Compounding:"These are second nature for you now, and they're multiplying what you can do. Your move from here is leverage: turn instinct into systems that run without you. Bring your focus area below up to speed, then package your strongest skill into something repeatable others can use. That's how it scales."
 };
 
+// Strength = cluster lead (by top cluster) + a skill line for the person's highest skill in that cluster.
 const STRENGTH = {
-  sharp:{t:"You see clearly.",b:"You can tell what's genuinely good and bring an angle that's your own. Judgment like that is the base your other three areas build on."},
-  ai:{t:"You have real command of AI.",b:"You shape the work, direct it, and catch where it's wrong, so AI makes you faster instead of just busier."},
-  reach:{t:"Your ideas travel.",b:"You can make work land and get it to the right people, so your thinking turns into real impact."},
-  human:{t:"Your human edge is strong.",b:"Focus, adaptability, ownership, and real relationships stay valuable no matter how capable AI gets. This is your moat."}
+  sharp:"You can tell what's genuinely good, bring an angle that's your own, and make sound calls when the pressure's on.",
+  ai:"You shape the work, direct it, and catch where it's wrong, so AI makes you faster instead of just busier.",
+  reach:"You can make work land and get it to the right people, so your thinking turns into real impact.",
+  human:"Focus, adaptability, ownership, and real relationships stay valuable no matter how capable AI gets. This is your moat."
+};
+
+const STRENGTH_SKILL = {
+  "Discernment & Critical Thinking":"you cut through polish fast and can tell what actually holds up, so weak reasoning rarely gets past you.",
+  "Judgment & Decision Making":"you weigh the real trade-offs and commit at the right speed, so the hard calls actually get made.",
+  "Systems Thinking":"you see how one move ripples through people and timelines, so you catch the second-order effects others miss.",
+  "Original & Creative Thinking":"you reach for angles no one else does, so people can spot your ideas as yours.",
+  "Taste":"you know what makes something great and can say why, so people trust your eye.",
+  "AI Fluency":"AI is woven into how you actually work, so you move faster on the things that used to eat your day.",
+  "Framing & Directing AI":"you set AI up with the goal and the steps, so it delivers work you can actually use.",
+  "Checking AI's Work":"you stay with AI as it works and catch where it drifts, so you get its speed without inheriting its mistakes.",
+  "Storytelling & Communication":"you make ideas land in your own voice, so your message travels even when you're not in the room.",
+  "Point of View & Sensemaking":"you cut through the noise and stake out where you land, so people look to you to make sense of things.",
+  "Distribution & Audience":"you know where your people pay attention and reach them there, so what you make actually gets seen.",
+  "Building & Shipping":"you turn ideas into finished, shipped things, so your thinking shows up in the real world, not just in your head.",
+  "Self-Awareness & Motivation":"you know your strengths and what drives you and steer your work toward it, so you spend more time where you're at your best.",
+  "Focus":"you protect real blocks of deep work, so the important things get your best attention, not your leftovers.",
+  "Adapting & Learning":"you steady yourself fast and teach yourself what you need, so change works for you instead of against you.",
+  "Agency & Ownership":"you carry work all the way to a real outcome, so things land with you even when they get messy.",
+  "Leadership Under Ambiguity":"you put a direction on the table when no one's sure what to do, so the group around you keeps moving instead of stalling.",
+  "Relationship & Community Building":"you build real relationships that go both ways, so people know they can count on you and it comes back around."
 };
 
 // Focus area = cluster framing (why) + skill action (what to do), assembled at display time.
 const FOCUS = {
-  sharp:{label:"sharper thinking",why:"When information and options come at you fast, clear judgment keeps your work sound, and strengthening it raises the quality of every call you make."},
-  ai:{label:"operating with AI",why:"Directed well, AI multiplies what you can get done, and strengthening this is what moves you from using it to leading it."},
-  reach:{label:"reach",why:"Ideas only create value once they reach the right people, and building this turns your work into real influence."},
-  human:{label:"the human edge",why:"Focus, ownership, resilience, and real relationships hold your work together, and strengthening them keeps you valuable as everything else speeds up."}
+  sharp:"When information and options come at you fast, clear judgment keeps your work sound, and strengthening it raises the quality of every call you make.",
+  ai:"Directed well, AI multiplies what you can get done, and strengthening this is what moves you from using it to leading it.",
+  reach:"Ideas only create value once they reach the right people, and building this turns your work into real influence.",
+  human:"Focus, ownership, resilience, and real relationships hold your work together, and strengthening them keeps you valuable as everything else speeds up."
 };
 
 const ACTIONS = {
@@ -394,26 +419,31 @@ const App = (function(){
     const sums={},counts={}; ORDER.forEach(c=>{sums[c]=0;counts[c]=0;});
     QUESTIONS.forEach((q,i)=>{ sums[q.c]+=(answers[i]||1); counts[q.c]++; });
     const clusters = ORDER.map(c=>{ const avg=sums[c]/counts[c]; return {key:c,name:CLUSTERS[c],avg,pct:Math.round(avg/4*100)}; });
-    const top=[...clusters].sort((a,b)=>b.pct-a.pct)[0].key;
-    const focus=[...clusters].sort((a,b)=>a.pct-b.pct)[0].key;
-    // lowest-scoring skill within the focus cluster (tie -> first in question order)
-    let focusSkill=null, low=99;
-    QUESTIONS.forEach((q,i)=>{ if(q.c===focus){ const a=answers[i]||1; if(a<low){ low=a; focusSkill=q.skill; } } });
-    result={total,score,level,clusters,top,focus,focusSkill,answers:[...answers]};
+    // one ranked list so top and focus are always different clusters, even when every cluster ties
+    const ranked=[...clusters].sort((a,b)=>b.pct-a.pct);
+    const top=ranked[0].key;
+    const focus=ranked[ranked.length-1].key;
+    // highest skill within the top cluster, lowest within the focus cluster (tie -> first in question order)
+    let topSkill=null, high=-1, focusSkill=null, low=99;
+    QUESTIONS.forEach((q,i)=>{ const a=answers[i]||1;
+      if(q.c===top && a>high){ high=a; topSkill=q.skill; }
+      if(q.c===focus && a<low){ low=a; focusSkill=q.skill; }
+    });
+    result={total,score,level,clusters,top,focus,topSkill,focusSkill,answers:[...answers]};
   }
 
   function paint(){
     animateNumber($('r-score'), result.score, 1100);
+    $('r-level').className = 'levelbadge lb'+(LEVELS.indexOf(result.level)+1);
     $('r-level').textContent = result.level;
     $('r-msg').textContent = LEVEL_MSG[result.level];
     drawRadar(result.clusters);
     paintClusters(result.clusters);
     paintAllSkills();
-    const s=STRENGTH[result.top];
-    $('r-strength-title').textContent=s.t; $('r-strength-body').textContent=s.b;
-    const f=FOCUS[result.focus];
-    $('r-focus-title').textContent = f.label.charAt(0).toUpperCase()+f.label.slice(1);
-    $('r-focus-body').innerHTML = f.why+' The best place to start is <strong>'+result.focusSkill+'</strong>: '+ACTIONS[result.focusSkill];
+    $('r-strength-title').textContent = CLUSTERS[result.top];
+    $('r-strength-body').innerHTML = STRENGTH[result.top]+' Your sharpest edge here is <strong>'+result.topSkill+'</strong>: '+STRENGTH_SKILL[result.topSkill];
+    $('r-focus-title').textContent = CLUSTERS[result.focus];
+    $('r-focus-body').innerHTML = FOCUS[result.focus]+' The best place to start is <strong>'+result.focusSkill+'</strong>: '+ACTIONS[result.focusSkill];
   }
 
   function animateNumber(el,to,dur){
@@ -492,16 +522,6 @@ const App = (function(){
     });
   }
 
-  function siteUrl(){ return CONFIG.SITE_URL || (location.origin+location.pathname); }
-  function shareText(){
-    return `I scored my skills against the 18 capabilities that compound as AI gets more capable. It gave me one clear thing to work on next. Curious where you'd land? ${siteUrl()}`;
-  }
-  async function share(){
-    const text=shareText();
-    if(navigator.share){ try{ await navigator.share({title:'The Relevance Score',text,url:siteUrl()}); return; }catch(e){} }
-    try{ await navigator.clipboard.writeText(text); toast('Copied, thanks for spreading it.'); }
-    catch(e){ toast('Copy this link: '+siteUrl()); }
-  }
   function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
 
   function downloadPDF(){
@@ -527,11 +547,10 @@ const App = (function(){
     doc.text(result.level, M, y); y+=10;
     rule();
     kicker('Where you stand'); para(LEVEL_MSG[result.level]);
-    const s=STRENGTH[result.top];
-    kicker('Your strength'); para(s.t,{style:'bold',color:BLACK,size:12.5,gap:4}); para(s.b);
-    const f=FOCUS[result.focus];
-    kicker('Your focus area'); para(cap(f.label),{style:'bold',color:BLACK,size:12.5,gap:4});
-    para(f.why,{gap:5}); para('The best place to start is '+result.focusSkill+': '+ACTIONS[result.focusSkill],{color:SIENNA});
+    kicker('Your strength'); para(CLUSTERS[result.top],{style:'bold',color:BLACK,size:12.5,gap:4});
+    para(STRENGTH[result.top]+' Your sharpest edge here is '+result.topSkill+': '+STRENGTH_SKILL[result.topSkill]);
+    kicker('Your focus area'); para(CLUSTERS[result.focus],{style:'bold',color:BLACK,size:12.5,gap:4});
+    para(FOCUS[result.focus],{gap:5}); para('The best place to start is '+result.focusSkill+': '+ACTIONS[result.focusSkill],{color:SIENNA});
     y+=8; rule();
     doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
     doc.text('The Relevance by Shilpi Sneha   ·   See your full breakdown any time, and retake in 90 days to watch it grow.', M, y);
@@ -539,7 +558,7 @@ const App = (function(){
     toast('Your score PDF is downloading.');
   }
 
-  return {startIntro,startQuestions,back,next,reveal,share,downloadPDF};
+  return {startIntro,startQuestions,back,next,reveal,downloadPDF};
 })();
 window.App = App;
 </script>
