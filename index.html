@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 :root{
@@ -22,7 +22,7 @@
   --on-accent:#1D1304;--grad:linear-gradient(135deg,#F3CB7D 0%,#E89257 100%);--radius:18px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+html,body{height:100%;background:#000000}
 body{background:var(--bg);color:var(--ink);font-family:'Poppins',system-ui,sans-serif;font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(60% 45% at 50% 0%,rgba(243,203,125,.10),transparent 70%),radial-gradient(50% 40% at 85% 100%,rgba(232,146,87,.07),transparent 70%)}
@@ -552,8 +552,46 @@ const App = (function(){
     kicker('Your focus area'); para(CLUSTERS[result.focus],{style:'bold',color:BLACK,size:12.5,gap:4});
     para(FOCUS[result.focus],{gap:5}); para('The best place to start is '+result.focusSkill+': '+ACTIONS[result.focusSkill],{color:SIENNA});
     y+=8; rule();
+
+    // Your four clusters at a glance
+    kicker('Your four clusters at a glance');
+    result.clusters.forEach(cl=>{
+      ensure(17);
+      doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]);
+      doc.text(cl.name, M, y);
+      doc.setFont('helvetica','bold'); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+      doc.text(cl.pct+'/100', W-M, y, {align:'right'});
+      y+=17;
+    });
+    y+=6; rule();
+
+    // Every skill, by cluster
+    kicker('Every skill, by cluster');
+    ORDER.forEach(ck=>{
+      const cl=result.clusters.find(c=>c.key===ck);
+      const rowCount=QUESTIONS.filter(q=>q.c===ck).length;
+      ensure(34 + rowCount*14);
+      doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(BLACK[0],BLACK[1],BLACK[2]);
+      doc.text(CLUSTERS[ck], M, y);
+      doc.setFontSize(9.5); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+      doc.text(cl.pct+'/100', W-M, y, {align:'right'});
+      y+=6;
+      doc.setDrawColor(LINE[0],LINE[1],LINE[2]); doc.line(M,y,W-M,y); y+=14;
+      QUESTIONS.forEach((q,i)=>{
+        if(q.c!==ck) return;
+        const lv=result.answers[i]||1;
+        ensure(15);
+        doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(CHARCOAL[0],CHARCOAL[1],CHARCOAL[2]);
+        doc.text(q.skill, M, y);
+        doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+        doc.text(LEVELS[lv-1], W-M, y, {align:'right'});
+        y+=14;
+      });
+      y+=8;
+    });
+    y+=2; rule();
     doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
-    doc.text('The Relevance by Shilpi Sneha   ·   See your full breakdown any time, and retake in 90 days to watch it grow.', M, y);
+    doc.text('The Relevance by Shilpi Sneha   ·   Retake in 90 days to watch it grow.', M, y);
     doc.save('my-relevance-score.pdf');
     toast('Your score PDF is downloading.');
   }
