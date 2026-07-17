@@ -162,10 +162,14 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
     <h1>How relevant is your skill set <span class="gold">in the AI era?</span></h1>
     <p class="sub">Sign up to take the assessment. In about 5 minutes you'll see where you stand across <strong>18 capabilities</strong> that compound as AI gets more capable, and you'll get your results as a PDF to keep.</p>
     <div class="embed-box" id="beehiiv-slot">
-      <div id="signup-loading" class="embed-loading">Saving you a seat…</div>
-      <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="e4f13cd2-4658-4aa1-83c8-21d83ede025e"></script>
+      <iframe id="beehiiv-frame"
+        src="https://subscribe-forms.beehiiv.com/e4f13cd2-4658-4aa1-83c8-21d83ede025e"
+        title="Sign up to take The Relevance Score"
+        style="width:100%;height:260px;border:none;background:transparent;color-scheme:light;"
+        scrolling="no" loading="eager"></iframe>
     </div>
-    <button class="btn" onclick="App.startIntro()">Start the assessment →</button>
+    <div class="embed-note" id="gate-note">Sign up above to unlock your assessment.</div>
+    <button class="btn" id="start-btn" onclick="App.startIntro()" style="display:none">Start the assessment →</button>
     <div class="trust">Built on research and analysis from 50+ tech, business, and AI voices, synthesized into the 18 skills that actually compound with AI.</div>
   </section>
 
@@ -637,15 +641,29 @@ const App = (function(){
 })();
 window.App = App;
 
-// Remove the "Loading sign-up…" placeholder as soon as the Beehiiv form reports in.
-window.addEventListener('message', function(e){
-  if(e.origin !== 'https://subscribe-forms.beehiiv.com') return;
-  var d = e.data;
-  if(d && typeof d.type === 'string' && d.type.indexOf('beehiiv:') === 0){
-    var ph = document.getElementById('signup-loading');
-    if(ph) ph.remove();
+// GATE: the assessment stays locked until the Beehiiv form reports a real,
+// successful subscribe. We listen only for the submit/success events the
+// embed emits — NOT the load/resize/style chatter — so nobody reaches the
+// quiz without actually signing up.
+(function(){
+  var UNLOCK_EVENTS = ['beehiiv:submitted', 'beehiiv:success-toast', 'beehiiv:redirect'];
+  var unlocked = false;
+  function unlock(){
+    if(unlocked) return;
+    unlocked = true;
+    var btn = document.getElementById('start-btn');
+    var note = document.getElementById('gate-note');
+    if(note){ note.textContent = "You're in — check your inbox to confirm, then start below."; }
+    if(btn){ btn.style.display = 'inline-block'; btn.focus && btn.focus(); }
   }
-});
+  window.addEventListener('message', function(e){
+    if(e.origin !== 'https://subscribe-forms.beehiiv.com') return;
+    var d = e.data;
+    if(d && typeof d.type === 'string' && UNLOCK_EVENTS.indexOf(d.type) !== -1){
+      unlock();
+    }
+  });
+})();
 </script>
 </body>
 </html>
