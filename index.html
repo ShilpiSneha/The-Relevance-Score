@@ -75,7 +75,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
 
 .gate h2{font-size:clamp(24px,4.2vw,32px);margin-bottom:14px}
 .gate p{color:var(--muted);font-size:16px;max-width:580px;margin-bottom:24px}
-.embed-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:22px;max-width:520px;min-height:150px;display:flex;flex-direction:column;justify-content:center}
+.embed-box{background:transparent;border:none;padding:0;margin:0 0 22px;max-width:520px;min-height:0}
 .embed-loading{color:var(--faint);font-size:14px;text-align:center;padding:20px 0}
 .embed-note{font-size:13px;color:var(--faint);margin-top:10px}
 
@@ -156,21 +156,11 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;font-weight:600;line-height:1.18;color
 <div class="wrap">
   <div class="brand hidden" id="brand"><span class="name">The Relevance</span></div>
 
-  <!-- SCREEN 0 · LANDING + SIGN-UP GATE -->
-  <section class="screen active vcenter landing" id="s-landing">
+  <!-- ENTRY SCREEN · ASSESSMENT INTRO -->
+  <!-- Subscribe + redirect are handled on Beehiiv; visitors arrive here already signed up, -->
+  <!-- so this page opens straight on the assessment intro (no sign-up form on GitHub). -->
+  <section class="screen active vcenter prime" id="s-prime">
     <div class="eyebrow">The Relevance Score</div>
-    <h1>How relevant is your skill set <span class="gold">in the AI era?</span></h1>
-    <p class="sub">Sign up to take the assessment. In about 5 minutes you'll see where you stand across <strong>18 capabilities</strong> that compound as AI gets more capable, and you'll get your results as a PDF to keep.</p>
-    <div class="embed-box" id="beehiiv-slot">
-      <div id="signup-loading" class="embed-loading">Saving you a seat…</div>
-      <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="e4f13cd2-4658-4aa1-83c8-21d83ede025e"></script>
-    </div>
-    <button class="btn" onclick="App.startIntro()">Start the assessment →</button>
-    <div class="trust">Built on research and analysis from 50+ tech, business, and AI voices, synthesized into the 18 skills that actually compound with AI.</div>
-  </section>
-
-  <!-- SCREEN 1 · PRIMING -->
-  <section class="screen vcenter prime" id="s-prime">
     <h2>Answer for how you <span class="gold">actually work</span>, not how you'd like to.</h2>
     <p>There are no right answers. Pick the option closest to true today. Your first instinct is usually the honest one.</p>
     <button class="btn" onclick="App.startQuestions()">Got it, let's go →</button>
@@ -636,16 +626,6 @@ const App = (function(){
   return {startIntro,startQuestions,back,next,reveal,downloadPDF};
 })();
 window.App = App;
-
-// Remove the "Loading sign-up…" placeholder as soon as the Beehiiv form reports in.
-window.addEventListener('message', function(e){
-  if(e.origin !== 'https://subscribe-forms.beehiiv.com') return;
-  var d = e.data;
-  if(d && typeof d.type === 'string' && d.type.indexOf('beehiiv:') === 0){
-    var ph = document.getElementById('signup-loading');
-    if(ph) ph.remove();
-  }
-});
 </script>
 </body>
 </html>
